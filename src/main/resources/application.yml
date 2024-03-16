@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+#  sql:
+#    init:
+#      mode: always
+#      schema-locations: classpath:scheme.sql
+  datasource:
+    recruit-db:
+      driver-clas`s-name: com.mysql.cj.jdbc.Driver
+      validationQuery: SELECT 1
+      poolName: Mysqldb-HikariCP-Main
+      url: jdbc:mysql://localhost:3306/recruit_db?characterEncoding=utf8&allowMultiQueries=true
+      username: recruit
+      password: ENC('zgpeqBWiG/fVsBSuj3ctyw==')
+  jpa:
+    hibernate:
+#      ddl-auto: create  #
+      ddl-auto: none   #
+    open-in-view: false
+    show-sql: true
+  cache:
+    type: caffeine
+
+jwt:
+  secret:
+    key: b50e022498ce5a4c192aecdb4e11777d4fafb7b650dd4b1a2546e0f9116078d755fac4e08521fcfa560f3b6795d34c9443d60199e18d42f96388e046bb490e84
+  expiration-min: 30
+  issuer: forlks.hashnode.dev
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    password: 1q2w3e4r
+
+
+
