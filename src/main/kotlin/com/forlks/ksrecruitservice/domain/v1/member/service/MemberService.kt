@@ -23,6 +23,15 @@ class MemberService(
 ) {
     private val log = KotlinLogging.logger {}
 
+    /**
+     * Authenticates a member using the provided credentials and returns a JWT token upon successful sign-in.
+     *
+     * If the user does not exist or the password is incorrect, a `KsServiceException` is thrown with the appropriate error code.
+     *
+     * @param dto The sign-in request containing user ID and password.
+     * @return A JWT token representing the authenticated session.
+     * @throws KsServiceException If authentication fails or an internal error occurs.
+     */
     @Transactional(readOnly = false, rollbackFor = [Exception::class, KsServiceException::class])
     fun signIn(dto: MemberController.SignInReqDto): String = try {
         val member = memberRepository.findUsersEntityByUserIdAndDelete(dto.userId, "N")

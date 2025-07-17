@@ -41,6 +41,18 @@ class PositionService(
         throw KsServiceException(KsResponse.KS_INTERNAL_SERVER_ERROR, e)
     }
 
+    /**
+     * Submits a job application for a member to a specified job position using a given resume.
+     *
+     * Prevents duplicate applications by checking for existing non-deleted applicant tracking records.
+     * Throws a `KsServiceException` if the member has already applied to the job position.
+     *
+     * @param memberId The ID of the member applying.
+     * @param jobPositionId The ID of the job position to apply for.
+     * @param resumeId The ID of the resume to use for the application.
+     * @return `true` if the application is successfully submitted.
+     * @throws KsServiceException if a duplicate application is detected or an internal error occurs.
+     */
     @Transactional(readOnly = false, rollbackFor = [Exception::class, KsServiceException::class])
     fun apply(memberId: Long, jobPositionId: Long, resumeId: Long):Boolean = try {
         var count = applicantTrackingRepository.countAllByMemberIdAndJobPositionIdAndDelete(memberId, jobPositionId,

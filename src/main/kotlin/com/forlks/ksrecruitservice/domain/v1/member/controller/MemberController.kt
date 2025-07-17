@@ -34,6 +34,12 @@ class MemberController(
         KsResponse.KS_SUCCESS.toDataResponse(mapOf("encrypt" to encoder.encode(dto.password)))
 
 
+    /**
+     * Authenticates a member using provided credentials and returns a JWT token on success.
+     *
+     * @param dto The sign-in request containing user credentials.
+     * @return A JSON response containing the JWT token if authentication is successful, or an error response if authentication fails.
+     */
     @Operation(summary = "로그인")
     @PostMapping(value = ["/sign-in"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun signIn(dto: SignInReqDto) = try {

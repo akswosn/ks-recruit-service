@@ -19,7 +19,13 @@ class PositionController(
 ) {
     private val log = KotlinLogging.logger {}
 
-    @Operation(summary = "전체허용 채용중인 공고 리스트 조회")
+    /**
+         * Retrieves a list of currently open job positions, optionally filtered by tags.
+         *
+         * @param tags Optional list of tags to filter job positions.
+         * @return A JSON response containing the list of job positions.
+         */
+        @Operation(summary = "전체허용 채용중인 공고 리스트 조회")
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun positionList(@RequestParam tags: List<String>?): Any =
         runCatching {
@@ -28,6 +34,16 @@ class PositionController(
             handleException(e)
         }
 
+    /**
+     * Handles a job application request for a specific job position by an authenticated user.
+     *
+     * Extracts the member ID from the JWT token in the HTTP request, then processes the application using the provided job position ID and resume ID.
+     * Returns a JSON response indicating the result of the application.
+     *
+     * @param jobPositionId The ID of the job position to apply for.
+     * @param dto The request body containing the resume ID.
+     * @return A JSON response with the result of the application.
+     */
     @SecurityRequirement(name = "Authorization")
     @Operation(summary = "입사지원 (로그인후 이용가능)")
     @PostMapping("/{jobPositionId}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -46,6 +62,14 @@ class PositionController(
         handleException(e)
     }
 
+    /**
+     * Converts a thrown exception into an appropriate HTTP response.
+     *
+     * If the exception is a `KsException`, returns its associated response; otherwise, returns a generic internal server error response.
+     *
+     * @param e The exception to handle.
+     * @return The HTTP response corresponding to the exception.
+     */
     private fun handleException(e: Throwable): Any = when (e) {
         is KsException -> {
             log.warn { "ksException: $e" }
