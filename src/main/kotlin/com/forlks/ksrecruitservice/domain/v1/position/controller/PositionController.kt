@@ -1,9 +1,9 @@
-package com.forlks.ksrecruitservice.position.v1.controller
+package com.forlks.ksrecruitservice.domain.v1.position.controller
 
 import com.forlks.ksrecruitservice.common.component.JwtTokenProvider
 import com.forlks.ksrecruitservice.common.exception.KsException
 import com.forlks.ksrecruitservice.common.response.KsResponse
-import com.forlks.ksrecruitservice.position.v1.service.PositionService
+import com.forlks.ksrecruitservice.domain.v1.position.service.PositionService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.servlet.http.HttpServletRequest

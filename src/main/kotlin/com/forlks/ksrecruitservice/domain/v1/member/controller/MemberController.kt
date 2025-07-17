@@ -1,10 +1,10 @@
-package com.forlks.ksrecruitservice.member.v1.controller
+package com.forlks.ksrecruitservice.domain.v1.member.controller
 
 import com.forlks.ksrecruitservice.common.component.JwtTokenProvider
 import com.forlks.ksrecruitservice.common.exception.KsException
 import com.forlks.ksrecruitservice.common.response.KsResponse
 import com.forlks.ksrecruitservice.common.response.KsResponseEntity
-import com.forlks.ksrecruitservice.member.v1.service.MemberService
+import com.forlks.ksrecruitservice.domain.v1.member.service.MemberService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.servlet.http.HttpServletRequest
@@ -12,7 +12,6 @@ import mu.KotlinLogging
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
