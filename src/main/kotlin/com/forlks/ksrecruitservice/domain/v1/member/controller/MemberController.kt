@@ -36,7 +36,7 @@ class MemberController(
 
     @Operation(summary = "로그인")
     @PostMapping(value = ["/sign-in"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun signIn(dto: SigninReqDto) = try {
+    fun signIn(dto: SignInReqDto) = try {
         KsResponse.KS_SUCCESS.toDataResponse(mapOf("token" to memberService.signIn(dto)))
     } catch (e: KsException) {
         log.warn("#### ksException :: $e")
@@ -64,5 +64,5 @@ class MemberController(
 
     class PasswordReqDto(var password: String = "")
 
-    class SigninReqDto(var userId: String = "", var password: String = "")
+    class SignInReqDto(var userId: String = "", var password: String = "")
 }

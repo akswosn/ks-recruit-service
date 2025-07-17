@@ -24,7 +24,7 @@ class MemberService(
     private val log = KotlinLogging.logger {}
 
     @Transactional(readOnly = false, rollbackFor = [Exception::class, KsServiceException::class])
-    fun signIn(dto: MemberController.SigninReqDto): String = try {
+    fun signIn(dto: MemberController.SignInReqDto): String = try {
         val member = memberRepository.findUsersEntityByUserIdAndDelete(dto.userId, "N")
             .orElseThrow { KsServiceException(KsResponse.KS_NOT_USER, Exception()) }
         log.info("### member ::: $member")
