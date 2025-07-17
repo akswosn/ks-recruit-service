@@ -1,0 +1,25 @@
+version: 1
+project:
+  name: ks-recruit-service
+  language: kotlin
+  description: Recruit service backend
+  author: imgeunsu
+tasks:
+  - name: lint
+    run: |
+      flake8 .
+  - name: test
+    run: |
+      pytest
+  - name: format
+    run: |
+      black .
+exclude:
+  - venv/
+  - .git/
+  - __pycache__/
+  - node_modules/
+
+reviews:
+  language: ko
+  review_status: true
