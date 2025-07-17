@@ -54,7 +54,7 @@ class PositionService(
             memberResumeId = resumeId, processStateId = jobPositionApplyState,
             createdAt = ZonedDateTime.now(), delete = "N"
         )
-
+        ;log.info { "apply insert ::: ${apply}" }
         applicantTrackingRepository.save(apply)
 
         true
