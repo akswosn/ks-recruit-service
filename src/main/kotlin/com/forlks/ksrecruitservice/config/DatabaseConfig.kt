@@ -1,7 +1,6 @@
 package com.forlks.ksrecruitservice.config
 
 import jakarta.persistence.EntityManagerFactory
-import org.springframework.beans.factory.annotation.Configurable
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings
@@ -9,13 +8,13 @@ import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
-import javax.sql.DataSource
 
-@Configurable
+@Configuration
 @EnableJpaRepositories(
     basePackages = ["com.forlks.ksrecruitservice.database.repository"],
     entityManagerFactoryRef = "entityManagerFactory",
@@ -55,10 +54,10 @@ class DatabaseConfig (
     @Primary
     @Bean
     fun transactionManager(
-        entityManagerFactory : LocalContainerEntityManagerFactoryBean
+        entityManagerFactory : EntityManagerFactory
     ): JpaTransactionManager {
         val transactionManager = JpaTransactionManager()
-        transactionManager.entityManagerFactory = entityManagerFactory.`object`
+        transactionManager.entityManagerFactory = entityManagerFactory
         return transactionManager
     }
 }
