@@ -13,45 +13,49 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/position")
-class PositionController (
+class PositionController(
     private val positionService: PositionService,
     private val jwtTokenProvider: JwtTokenProvider
-){
-    private val log = KotlinLogging.logger{}
-
+) {
+    private val log = KotlinLogging.logger {}
 
     @Operation(summary = "전체허용 채용중인 공고 리스트 조회")
-    @GetMapping(value = [""], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun positionList(@RequestParam tags: List<String>?) = try {
-        KsResponse.KS_SUCCESS.toDataResponse(mapOf("data" to positionService.list(tags)))
-    } catch (e : KsException){
-        log.warn("#### ksException :: $e")
-        e.ksResponse().toResponse()
-    } catch (e : Exception){
-        log.error("#### Unchecked Exception :: $e")
-        KsResponse.KS_INTERNAL_SERVER_ERROR.toResponse()
-    }
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun positionList(@RequestParam tags: List<String>?): Any =
+        runCatching {
+            KsResponse.KS_SUCCESS.toDataResponse(mapOf("data" to positionService.list(tags)))
+        }.getOrElse { e ->
+            handleException(e)
+        }
 
     @SecurityRequirement(name = "Authorization")
     @Operation(summary = "입사지원 (로그인후 이용가능)")
-    @PostMapping(value = ["/{jobPositionId}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping("/{jobPositionId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun apply(
-        @PathVariable("jobPositionId") jobPositionId: Long,
+        @PathVariable jobPositionId: Long,
         @RequestBody dto: ApplyReqDto,
-        request: HttpServletRequest) = try {
+        request: HttpServletRequest
+    ): Any = runCatching {
         val token = jwtTokenProvider.resolveToken(request)
         val memberId = jwtTokenProvider.getMemberId(token)
-
-        log.info("### memberId: $memberId")
-
-        KsResponse.KS_SUCCESS.toDataResponse(mapOf("result" to positionService.apply(memberId, jobPositionId, dto.resumeId)))
-    } catch (e : KsException){
-        log.warn("#### ksException :: $e")
-        e.ksResponse().toResponse()
-    } catch (e : Exception){
-        log.error("#### Unchecked Exception :: $e")
-        KsResponse.KS_INTERNAL_SERVER_ERROR.toResponse()
+        log.info { "memberId: $memberId" }
+        KsResponse.KS_SUCCESS.toDataResponse(
+            mapOf("result" to positionService.apply(memberId, jobPositionId, dto.resumeId))
+        )
+    }.getOrElse { e ->
+        handleException(e)
     }
 
-    class ApplyReqDto (var resumeId: Long = 0){}
+    private fun handleException(e: Throwable): Any = when (e) {
+        is KsException -> {
+            log.warn { "ksException: $e" }
+            e.ksResponse().toResponse()
+        }
+        else -> {
+            log.error { "Unchecked Exception: $e" }
+            KsResponse.KS_INTERNAL_SERVER_ERROR.toResponse()
+        }
+    }
+
+    data class ApplyReqDto(val resumeId: Long = 0)
 }
