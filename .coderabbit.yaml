@@ -7,18 +7,18 @@ project:
 tasks:
   - name: lint
     run: |
-      flake8 .
+      ./gradlew detekt
   - name: test
     run: |
-      pytest
+      ./gradlew test
   - name: format
     run: |
-      black .
+      ./gradlew bootRun
 exclude:
-  - venv/
   - .git/
-  - __pycache__/
-  - node_modules/
+  - .idea/
+  - .gradle/
+  - build/
 
 reviews:
   language: ko
