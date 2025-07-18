@@ -1,4 +1,4 @@
-package com.forlks.ksrecruitservice.member.v1.service
+package com.forlks.ksrecruitservice.domain.v1.member.service
 
 import com.forlks.ksrecruitservice.common.component.JwtTokenProvider
 import com.forlks.ksrecruitservice.common.dto.JwtPayloadDto
@@ -6,11 +6,10 @@ import com.forlks.ksrecruitservice.common.exception.KsException
 import com.forlks.ksrecruitservice.common.exception.KsServiceException
 import com.forlks.ksrecruitservice.common.response.KsResponse
 import com.forlks.ksrecruitservice.common.utils.EncryptUtils
-import com.forlks.ksrecruitservice.database.entity.ApplicantTrackingEntity
 import com.forlks.ksrecruitservice.database.repository.ApplicantTrackingRepository
 import com.forlks.ksrecruitservice.database.repository.MemberRepository
-import com.forlks.ksrecruitservice.member.v1.controller.MemberController
-import com.forlks.ksrecruitservice.member.v1.vo.jobposition.MyApplyJobPosition
+import com.forlks.ksrecruitservice.domain.v1.member.controller.MemberController
+import com.forlks.ksrecruitservice.domain.v1.member.jobposition.MyApplyJobPosition
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -24,8 +23,16 @@ class MemberService(
 ) {
     private val log = KotlinLogging.logger {}
 
+    /**
+     * Authenticates a member using the provided credentials and returns a JWT token upon successful sign-in.
+     *
+     * Throws a `KsServiceException` if the user does not exist, the password is invalid, or an internal error occurs.
+     *
+     * @param dto The sign-in request containing user ID and password.
+     * @return A JWT token string if authentication is successful.
+     */
     @Transactional(readOnly = false, rollbackFor = [Exception::class, KsServiceException::class])
-    fun signIn(dto: MemberController.SigninReqDto): String = try {
+    fun signIn(dto: MemberController.SignInReqDto): String = try {
         val member = memberRepository.findUsersEntityByUserIdAndDelete(dto.userId, "N")
             .orElseThrow { KsServiceException(KsResponse.KS_NOT_USER, Exception()) }
         log.info("### member ::: $member")

@@ -1,10 +1,10 @@
-package com.forlks.ksrecruitservice.member.v1.controller
+package com.forlks.ksrecruitservice.domain.v1.member.controller
 
 import com.forlks.ksrecruitservice.common.component.JwtTokenProvider
 import com.forlks.ksrecruitservice.common.exception.KsException
 import com.forlks.ksrecruitservice.common.response.KsResponse
 import com.forlks.ksrecruitservice.common.response.KsResponseEntity
-import com.forlks.ksrecruitservice.member.v1.service.MemberService
+import com.forlks.ksrecruitservice.domain.v1.member.service.MemberService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.servlet.http.HttpServletRequest
@@ -12,7 +12,6 @@ import mu.KotlinLogging
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -35,9 +34,15 @@ class MemberController(
         KsResponse.KS_SUCCESS.toDataResponse(mapOf("encrypt" to encoder.encode(dto.password)))
 
 
+    /**
+     * Authenticates a user with the provided credentials and returns a JWT token on success.
+     *
+     * Accepts a sign-in request containing user ID and password, delegates authentication to the member service,
+     * and returns a response with a JWT token if authentication is successful. Returns an error response if authentication fails.
+     */
     @Operation(summary = "로그인")
     @PostMapping(value = ["/sign-in"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun signIn(dto: SigninReqDto) = try {
+    fun signIn(dto: SignInReqDto) = try {
         KsResponse.KS_SUCCESS.toDataResponse(mapOf("token" to memberService.signIn(dto)))
     } catch (e: KsException) {
         log.warn("#### ksException :: $e")
@@ -65,5 +70,5 @@ class MemberController(
 
     class PasswordReqDto(var password: String = "")
 
-    class SigninReqDto(var userId: String = "", var password: String = "")
+    class SignInReqDto(var userId: String = "", var password: String = "")
 }

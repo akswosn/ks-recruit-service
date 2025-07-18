@@ -1,7 +1,16 @@
 server:
   port: 8080
-
 spring:
+  application:
+    name: "cart-bp-service"
+  profiles:
+    active: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "local"
   h2:
     console:
       enabled: true
@@ -12,13 +21,15 @@ spring:
 #      schema-locations: classpath:scheme.sql
   datasource:
     recruit-db:
-      driver-clas`s-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: com.mysql.cj.jdbc.Driver
       validationQuery: SELECT 1
       poolName: Mysqldb-HikariCP-Main
       url: jdbc:mysql://localhost:3306/recruit_db?characterEncoding=utf8&allowMultiQueries=true
+      jdbcUrl: jdbc:mysql://localhost:3306/recruit_db?characterEncoding=utf8&allowMultiQueries=true
       username: recruit
       password: ENC('zgpeqBWiG/fVsBSuj3ctyw==')
   jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
 #      ddl-auto: create  #
       ddl-auto: none   #

@@ -1,4 +1,4 @@
-package com.forlks.ksrecruitservice.position.v1.vo
+package com.forlks.ksrecruitservice.domain.v1.position.vo
 
 import jakarta.persistence.Column
 

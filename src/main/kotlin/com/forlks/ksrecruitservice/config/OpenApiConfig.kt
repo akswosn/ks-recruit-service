@@ -1,4 +1,4 @@
-package com.forlks.ksrecruitservice.common.config
+package com.forlks.ksrecruitservice.config
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI

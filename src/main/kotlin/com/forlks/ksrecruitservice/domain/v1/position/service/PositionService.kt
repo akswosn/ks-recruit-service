@@ -1,19 +1,15 @@
-package com.forlks.ksrecruitservice.position.v1.service
+package com.forlks.ksrecruitservice.domain.v1.position.service
 
-import com.forlks.ksrecruitservice.common.dto.JwtPayloadDto
 import com.forlks.ksrecruitservice.common.exception.KsException
 import com.forlks.ksrecruitservice.common.exception.KsServiceException
 import com.forlks.ksrecruitservice.common.response.KsResponse
 import com.forlks.ksrecruitservice.database.entity.ApplicantTrackingEntity
-import com.forlks.ksrecruitservice.database.entity.JobPositionEntity
 import com.forlks.ksrecruitservice.database.repository.ApplicantTrackingRepository
 import com.forlks.ksrecruitservice.database.repository.JobPositionRepository
-import com.forlks.ksrecruitservice.position.v1.controller.PositionController
-import com.forlks.ksrecruitservice.position.v1.vo.PositionListVo
+import com.forlks.ksrecruitservice.domain.v1.position.vo.PositionListVo
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
 import java.time.ZonedDateTime
 
 
@@ -45,6 +41,17 @@ class PositionService(
         throw KsServiceException(KsResponse.KS_INTERNAL_SERVER_ERROR, e)
     }
 
+    /**
+     * Submits a job application for a member to a specified job position using a given resume.
+     *
+     * Prevents duplicate applications by the same member to the same job position. Throws a service exception if the member has already applied. Returns `true` if the application is successfully submitted.
+     *
+     * @param memberId The ID of the member applying.
+     * @param jobPositionId The ID of the job position to apply for.
+     * @param resumeId The ID of the resume to use for the application.
+     * @return `true` if the application is successfully submitted.
+     * @throws KsServiceException If the member has already applied or if an internal server error occurs.
+     */
     @Transactional(readOnly = false, rollbackFor = [Exception::class, KsServiceException::class])
     fun apply(memberId: Long, jobPositionId: Long, resumeId: Long):Boolean = try {
         var count = applicantTrackingRepository.countAllByMemberIdAndJobPositionIdAndDelete(memberId, jobPositionId,
@@ -58,7 +65,7 @@ class PositionService(
             memberResumeId = resumeId, processStateId = jobPositionApplyState,
             createdAt = ZonedDateTime.now(), delete = "N"
         )
-
+        ;log.info { "apply insert ::: ${apply}" }
         applicantTrackingRepository.save(apply)
 
         true

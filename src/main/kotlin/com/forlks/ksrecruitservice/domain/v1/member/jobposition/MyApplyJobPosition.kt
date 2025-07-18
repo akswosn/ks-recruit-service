@@ -1,4 +1,4 @@
-package com.forlks.ksrecruitservice.member.v1.vo.jobposition
+package com.forlks.ksrecruitservice.domain.v1.member.jobposition
 
 import java.time.ZonedDateTime
 
