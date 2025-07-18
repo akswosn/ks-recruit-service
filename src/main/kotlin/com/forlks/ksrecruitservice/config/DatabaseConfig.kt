@@ -27,16 +27,36 @@ class DatabaseConfig (
 ){
 
 
+    /**
+     * Creates and returns the primary DataSourceProperties bean configured with properties
+     * prefixed by "spring.datasource.recruit-db".
+     *
+     * @return The DataSourceProperties for the recruit database.
+     */
     @Bean
     @Primary
     @ConfigurationProperties("spring.datasource.recruit-db")
     fun dataSourceProperties() = DataSourceProperties()
 
-    @Primary
+    /**
+         * Creates and configures the primary HikariCP DataSource bean using properties from the application's datasource configuration.
+         *
+         * @return The initialized HikariCP DataSource.
+         */
+        @Primary
     @Bean
     fun dataSource() = dataSourceProperties().initializeDataSourceBuilder()
         .type(com.zaxxer.hikari.HikariDataSource::class.java).build()
 
+    /**
+     * Creates and configures the primary JPA entity manager factory bean for the application.
+     *
+     * Sets up the entity manager factory with the configured data source, scans the specified package for JPA entities,
+     * assigns a persistence unit name, and applies Hibernate properties derived from JPA and Hibernate settings.
+     *
+     * @param builder The builder used to construct the entity manager factory.
+     * @return The configured `LocalContainerEntityManagerFactoryBean`.
+     */
     @Primary
     @Bean
     fun entityManagerFactory(
@@ -52,6 +72,12 @@ class DatabaseConfig (
             .build()
     }
 
+    /**
+     * Creates and configures the primary JPA transaction manager using the provided entity manager factory.
+     *
+     * @param entityManagerFactory The entity manager factory to associate with the transaction manager.
+     * @return The configured `JpaTransactionManager` bean.
+     */
     @Primary
     @Bean
     fun transactionManager(
