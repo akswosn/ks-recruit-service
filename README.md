@@ -10,7 +10,7 @@
 docker run -p 3306:3306 --name recruit-mysql -e MYSQL_ROOT_PASSWORD=forlks -d mysql:latest
 ``
 ````
-# Database, user 생성
+# Database, user 생성 1
 CREATE DATABASE recruit_db  default CHARACTER SET UTF8;
 
 CREATE USER 'recruit'@'localhost' IDENTIFIED BY 'recruit';
