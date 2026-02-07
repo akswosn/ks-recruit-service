@@ -52,6 +52,25 @@ class MemberController(
         KsResponse.KS_INTERNAL_SERVER_ERROR.toResponse()
     }
 
+    /**
+     * 신규 회원을 등록합니다.
+     *
+     * userId와 password를 받아 유효성 검증 후 회원을 생성합니다.
+     * - userId: 영문/숫자 4~20자
+     * - password: 8자 이상, 대소문자/숫자/특수문자 포함
+     */
+    @Operation(summary = "회원가입")
+    @PostMapping(value = ["/sign-up"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun signUp(@RequestBody dto: SignUpReqDto) = try {
+        KsResponse.KS_SUCCESS.toDataResponse(mapOf("result" to memberService.signUp(dto)))
+    } catch (e: KsException) {
+        log.warn("#### ksException :: $e")
+        e.ksResponse().toResponse()
+    } catch (e: Exception) {
+        log.error("#### Unchecked Exception :: $e")
+        KsResponse.KS_INTERNAL_SERVER_ERROR.toResponse()
+    }
+
     @SecurityRequirement(name = "Authorization")
     @Operation(summary = "진행중인 채용 프로세스 (로그인후 이용가능)")
     @PostMapping(value = ["/job-position"], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -71,4 +90,6 @@ class MemberController(
     class PasswordReqDto(var password: String = "")
 
     class SignInReqDto(var userId: String = "", var password: String = "")
+
+    class SignUpReqDto(var userId: String = "", var password: String = "")
 }

@@ -19,6 +19,8 @@ enum class KsResponse(
     KS_NEGATIVE_NUMBER(409, "KS0404", "NEGATIVE_NUMBER"),
     KS_EXIST_MEMBER(409, "KS0405", "KS_EXIST_USER"),
     KS_INVALID_MEMBER_PASSWORD(409, "KS0406", "KS_INVALID_USER_PASSWORD"),
+    KS_INVALID_USER_ID_FORMAT(400, "KS0408", "아이디는 영문/숫자 4~20자로 입력해주세요"),
+    KS_WEAK_PASSWORD(400, "KS0409", "비밀번호는 8자 이상, 대소문자/숫자/특수문자를 포함해야 합니다"),
 
     //서버 에러
     KS_INTERNAL_SERVER_ERROR(500, "KS5001", "Interval Server Error"),
