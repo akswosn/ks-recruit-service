@@ -1,25 +1,7 @@
-version: 1
-project:
-  name: ks-recruit-service
-  language: kotlin
-  description: Recruit service backend
-  author: imgeunsu
-tasks:
-  - name: lint
-    run: |
-      ./gradlew detekt
-  - name: test
-    run: |
-      ./gradlew test
-  - name: format
-    run: |
-      ./gradlew bootRun
-exclude:
-  - .git/
-  - .idea/
-  - .gradle/
-  - build/
-
+language: "ko-KR"
 reviews:
-  language: ko
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
   review_status: true
