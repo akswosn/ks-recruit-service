@@ -3,5 +3,14 @@ reviews:
   profile: "chill"
   request_changes_workflow: false
   high_level_summary: true
+  high_level_summary_placeholder: "@coderabbitai summary"
   poem: false
   review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: false
+  path_instructions:
+    - path: "**/*.kt"
+      instructions: "Kotlin 코드 리뷰 시 코틀린 컨벤션과 Spring Boot 패턴을 따르는지 확인해주세요."
+chat:
+  auto_reply: true
